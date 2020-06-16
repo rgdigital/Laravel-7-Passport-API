@@ -149,7 +149,7 @@ Vue.component(
 
 ```
 
-6. Now run `php artisan serve` and go to [localhost:8000](http://localhost:8000) in your browser.
+6. To serve your API, you can run `php artisan serve` and go to [localhost:8000](http://localhost:8000) in your browser. (Or setup a vhost to setup a local host address for your API app).
 
 7. Login using the header nav links in the top-right, then you will be able to see our Vue components for token management.
 
@@ -165,19 +165,21 @@ Choosing a grant type depends on how you want your API to be accessed:
 
 2. Add GuzzleHttp to make API requests with `composer require guzzlehttp/guzzle`.
 
-3. Add this code in `app/User.php` to retrieve and access token:
+3. In your API project folder, you need to create a client for password auth. To do this use this command: `php artisan passport:client --password`. Copy your client secret and client ID from the response.
+
+3. Now you have a client ID and secret, you can add this code in `app/User.php` to retrieve and access token:
 
 ```php
     $http = new GuzzleHttp\Client;
 
     try {
-        $response = $http->post('http://api.pangolincomms.com/oauth/token', [
+        $response = $http->post('http://yourapiapp.com/oauth/token', [
             'form_params' => [
                 'grant_type' => 'password',
-                'client_id' => '5',
-                'client_secret' => '29b9gRB8rt8pJV5XQNPWet6FS3WnBRaY5j8MAjB8',
-                'username' => 'rick@rgdigital.io',
-                'password' => '1337Hacksaw',
+                'client_id' => 'your_client_id',
+                'client_secret' => 'your_client_secret',
+                'username' => 'e@mail.com',
+                'password' => 'yourpassword',
                 'scope' => '*',
             ],
         ]);
@@ -199,19 +201,19 @@ Choosing a grant type depends on how you want your API to be accessed:
     $http = new GuzzleHttp\Client;
 
     try {
-        $response = $http->post('http://api.pangolincomms.com/oauth/token', [
+        $response = $http->post('http://yourapiapp.com/oauth/token', [
             'form_params' => [
                 'grant_type' => 'password',
-                'client_id' => '5',
-                'client_secret' => '29b9gRB8rt8pJV5XQNPWet6FS3WnBRaY5j8MAjB8',
-                'username' => 'rick@rgdigital.io',
-                'password' => '1337Hacksaw',
+                'client_id' => 'your_client_id',
+                'client_secret' => 'your_client_secret',
+                'username' => 'e@mail.com',
+                'password' => 'yourpassword',
                 'scope' => '*',
             ],
         ]);
 
         $auth = json_decode( (string) $response->getBody() );
-        $response = $http->get('http://api.pangolincomms.com/api/users', [
+        $response = $http->get('http://yourapiapp.com/api/users', [
             'headers' => [
                 'Authorization' => 'Bearer '.$auth->access_token,
             ]
